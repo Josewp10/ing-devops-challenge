@@ -22,3 +22,8 @@ provider "aws" {
 module "ecr" {
   source = "./ECR"
 }
+
+module "vpc" {
+  source = "./VPC"
+  vpc_name = var.vpc_name
+}

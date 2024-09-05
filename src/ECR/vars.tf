@@ -1,4 +1,2 @@
-variable "ecr_private_repo" {
-    type = string
-    default = "fikactiva_challenge"
-}
+//variable "aws_region" {}
+variable "ecr_private_repo_name" {}

@@ -1,5 +1,5 @@
 resource "aws_ecr_repository" "ecr_private_repo" {
-  name = var.ecr_private_repo
+  name = var.ecr_private_repo_name
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {

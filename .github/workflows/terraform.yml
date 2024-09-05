@@ -30,17 +30,19 @@ jobs:
       run: terraform init
       working-directory: src/
 
-    - name: Choose terraform workspace
+    - name: Choose Terraform workspace
       run: |
-        workspaces=$(terraform workspace list)
+        workspaces=$(terraform workspace list | awk '{print $1}')
 
         if echo "$workspaces" | grep -q "$GITHUB_ENV"; then
           terraform workspace select "$GITHUB_ENV"
         else
-          echo "$GITHUB_ENV workspace does not exist. Creating it..."
+          echo "Workspace $GITHUB_ENV does not exist. Creating it..."
           terraform workspace new "$GITHUB_ENV"
           terraform workspace select "$GITHUB_ENV"
         fi
+      env:
+        GITHUB_ENV: ${{ env.GITHUB_ENV }}
 
     - name: Build infrastructure
       run: |

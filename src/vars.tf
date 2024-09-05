@@ -52,3 +52,10 @@ variable "aws_elb_name" {
   type = string
   default = "project-elb"
 }
+
+variable "aws_task_definition_logs_configuration" {
+  type = object({
+    logDriver = string
+    options   = map(string)
+  })
+}

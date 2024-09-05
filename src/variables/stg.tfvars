@@ -17,6 +17,7 @@ ecs_cluster_name= "finaktiva-cluster-stg"
 ecs_task_execution_role_name="finaktiva-ecs-task-execution-role-stg"
 ecs_task_role_name = "finaktiva-ecs-task-role-stg"
 ecs_service_role_name= "finaktiva-ecs-service-role-stg"
+ecs_service_webserver_role="finaktiva-ecs_service_webserver_role-stg"
 container_one_tag="stgops-udem"
 container_two_tag="stgops-udem-2"
 aws_task_definition_logs_configuration = {

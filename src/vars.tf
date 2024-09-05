@@ -68,3 +68,7 @@ variable "container_two_tag" {
   type = string
   default = "container_two"
 }
+variable ecs_service_webserver_role{
+  type = string
+  default = null
+}

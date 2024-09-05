@@ -34,6 +34,7 @@ jobs:
       working-directory: src/
 
     - name: Choose terraform workspace
+      working-directory: src/
       run: |
         workspaces=$(terraform workspace list)
 
@@ -46,10 +47,12 @@ jobs:
         fi
 
     - name: Plan infrastructure
+      working-directory: src/
       run: |
         terraform plan --auto-approve -var-file="variables/${{ env.BRANCH_NAME }}.tfvars"
     
     - name: Create infrastructure
+      working-directory: src/
       run: |
         terraform apply --auto-approve -var-file="variables/${{ env.BRANCH_NAME }}.tfvars"
 

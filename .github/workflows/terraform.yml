@@ -6,6 +6,7 @@ on:
       - main
       - stg
       - dev
+      - analysis
 
 jobs:
   iac:

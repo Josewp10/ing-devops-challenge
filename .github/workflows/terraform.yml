@@ -1,0 +1,58 @@
+name: Terraform IaaC
+
+on:
+  push:
+    branches:
+      - main
+      - stg
+      - dev
+
+jobs:
+  iac:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set branch name
+      run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+    
+    - name: Configure AWS CREDENTIALS
+      run: |
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCES_KEY }} --region us-east-1       
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCES_KEY }} --region us-east-1
+          
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+          aws_access_key_id: ${{ secrets.AWS_ACCES_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCES_KEY }}
+          
+
+    - name: Terrform initialization
+      run: terraform init
+      working-directory: src
+
+    - name: Choose terraform workspace
+      working-directory: src/
+      run: |
+        workspaces=$(terraform workspace list)
+
+        if echo "$workspaces" | grep -q '${{ env.BRANCH_NAME }}'; then
+          terraform workspace select '${{ env.BRANCH_NAME }}'
+        else
+          echo "$GITHUB_ENV workspace does not exist. Creating it..."
+          terraform workspace new '${{ env.BRANCH_NAME }}'
+          terraform workspace select '${{ env.BRANCH_NAME }}'
+        fi
+
+    - name: Plan infrastructure
+      working-directory: src/
+      run: |
+        terraform plan -var-file="variables/${{ env.BRANCH_NAME }}.tfvars"
+    
+    - name: Create infrastructure
+      working-directory: src/
+      run: |
+        terraform apply --auto-approve -var-file="variables/${{ env.BRANCH_NAME }}.tfvars"
+

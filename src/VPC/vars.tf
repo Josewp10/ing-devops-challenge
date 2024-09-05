@@ -1,4 +1,6 @@
 variable "vpc_name" { }
+variable "vpc_sg_name" {}
+variable "vpc_availability_zones" {}
 
 variable "vpc_cidr" {
   type = string
@@ -16,6 +18,11 @@ variable "private_subnet_cidr" {
 }
 
 variable "internet_gw_cidr" {
+  type = string
+  default = "0.0.0.0/0"
+}
+
+variable "sg_cidr" {
   type = string
   default = "0.0.0.0/0"
 }

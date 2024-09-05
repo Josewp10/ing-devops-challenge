@@ -1,5 +1,6 @@
 resource "aws_ecr_repository" "ecr_private_repo" {
   name = var.ecr_private_repo_name
+  force_delete = true
 }
 
 resource "aws_ecr_lifecycle_policy" "lifecycle_policy" {

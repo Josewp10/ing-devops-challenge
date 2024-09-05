@@ -43,7 +43,7 @@ resource "aws_ecs_service" "ecs_service_webserver" {
 
 /////////////// SERVICE ROLE
 resource "aws_iam_role" "ecs_service_role" {
-  name = "ecs_service_webserver_role"
+  name = var.ecs_service_webserver_role
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17"

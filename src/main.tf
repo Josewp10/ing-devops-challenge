@@ -21,9 +21,19 @@ provider "aws" {
 
 module "ecr" {
   source = "./ECR"
+  ecr_private_repo_name = var.ecr_private_repo_name
 }
 
 module "vpc" {
   source = "./VPC"
   vpc_name = var.vpc_name
+}
+
+module "ecs" {
+  source = "./ECS"
+  ecs_cluster_name = var.ecs_cluster_name
+  ecs_task_execution_role_name = var.ecs_task_execution_role_name
+  ecs_task_role_name = var.ecs_task_role_name    
+  aws_region = var.aws_region
+  aws_account_id = var.aws_account_id
 }

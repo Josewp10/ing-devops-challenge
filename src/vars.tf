@@ -13,6 +13,16 @@ variable "vpc_name" {
   default = "vpc"
 }
 
+variable "vpc_sg_name" {
+  type = string
+  default = "vpc"
+}
+
+variable "vpc_availability_zones" {
+  type = list(string)
+  default = null
+}
+
 variable "ecr_private_repo_name" {
   type = string
   default = "ecr-repo"
@@ -31,4 +41,14 @@ variable "ecs_task_execution_role_name" {
 variable "ecs_task_role_name" {
     type = string
     default = "ecs_task_execution_role"
+}
+
+variable "ecs_service_role_name" {
+    type = string
+    default = "ecs_task_execution_role"
+}
+
+variable "aws_elb_name" {
+  type = string
+  default = "project-elb"
 }

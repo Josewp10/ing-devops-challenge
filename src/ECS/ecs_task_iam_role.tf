@@ -1,4 +1,4 @@
-resource "aws_iam_role" "ecs_task_policy" {
+resource "aws_iam_role" "ecs_task_role" {
     name = "${var.ecs_task_role_name}-${var.aws_region}"
     assume_role_policy = jsonencode({
         "Version":"2012-10-17",

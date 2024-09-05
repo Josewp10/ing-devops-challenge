@@ -5,6 +5,7 @@ resource "aws_lb_target_group" "target_group" {
   vpc_id   = var.aws_vpc_id
   target_type = "ip"
   deregistration_delay = 0
+
   health_check {
     enabled = true
     healthy_threshold = 3

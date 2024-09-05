@@ -1,7 +1,8 @@
 resource "aws_ecs_cluster" "ecs_cluster" {
   name = var.ecs_cluster_name
-
+  
   configuration {
+  
    execute_command_configuration {
     logging = "OVERRIDE" 
     log_configuration {
@@ -13,5 +14,21 @@ resource "aws_ecs_cluster" "ecs_cluster" {
   setting {
     name = "containerInsights"
     value = "enabled"
+  }
+}
+
+resource "aws_ecs_cluster_capacity_providers" "cluster_capacity_providers" {
+  cluster_name = aws_ecs_cluster.ecs_cluster.id
+
+  capacity_providers = ["FARGATE", "FARGATE_SPOT"]
+
+  default_capacity_provider_strategy {
+    capacity_provider = "FARGATE"
+    weight            = 1
+  }
+
+  default_capacity_provider_strategy {
+    capacity_provider = "FARGATE_SPOT"
+    weight            = 1
   }
 }

@@ -1,7 +1,7 @@
 resource "aws_ecs_task_definition" "webserver" {
   family                   = "webserver"
-  execution_role_arn       = "arn:aws:iam::308516746479:role/ecsTaskExecutionRole"
-  task_role_arn            = "arn:aws:iam::308516746479:role/ecsTaskExecutionRole"
+  execution_role_arn       = aws_iam_role.ecs_task_execution_role.arn
+  task_role_arn            = aws_iam_role.ecs_task_execution_role.arn
   network_mode             = "awsvpc"
   requires_compatibilities = ["FARGATE"]
   cpu                      = "1024"
@@ -15,7 +15,7 @@ resource "aws_ecs_task_definition" "webserver" {
   container_definitions = jsonencode([
     {
       name        = var.aws_ecs_container_name
-      image       = "308516746479.dkr.ecr.us-east-1.amazonaws.com/devops-udem:latest"
+      image       = "${var.aws_ecr_repository_url}:devops-udem"
       cpu         = 0
       essential   = true
       portMappings = [
@@ -32,10 +32,4 @@ resource "aws_ecs_task_definition" "webserver" {
   ])
 
   tags = {}
-
-  lifecycle {
-    ignore_changes = [
-      container_definitions
-    ]
-  }
 }

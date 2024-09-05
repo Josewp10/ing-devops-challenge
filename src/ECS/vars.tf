@@ -24,3 +24,4 @@ variable "aws_ecs_container_two_name" {
 variable aws_task_definition_logs_configuration{}
 variable "container_one_tag" {}
 variable "container_two_tag" {}
+variable ecs_service_webserver_role{}

@@ -42,6 +42,7 @@ module "ecs" {
   aws_task_definition_logs_configuration = var.aws_task_definition_logs_configuration
   ecs_task_role_name = var.ecs_task_role_name
   ecs_service_role_name = var.ecs_service_role_name
+  ecs_service_webserver_role = var.ecs_service_webserver_role
   container_one_tag = var.container_one_tag
   container_two_tag = var.container_two_tag
 

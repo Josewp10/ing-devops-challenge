@@ -6,43 +6,42 @@ on:
       - analyis
 
 jobs:
-  IaC:
+  iac:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
 
-      - name: Set branch name
-        run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
+    - name: Set branch name
+      run: echo "BRANCH_NAME=${GITHUB_REF#refs/heads/}" >> $GITHUB_ENV
 
-      - name: Configure Elastic Container Registry credentials
-        run: |
-            aws configure set aws_access_key_id ${{ secrets.AWS_ACCES_KEY }} --region us-east-1       
-            aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCES_KEY }} --region us-east-1
-      
-      - name: Set up Terraform
-        uses: hashicorp/setup-terraform@v1
-        with:
-            aws_access_key_id: ${{ secrets.AWS_ACCES_KEY }}
-            aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCES_KEY }}
-
-      - name: Terrform initialization
-        run: terraform init
-        working-directory: src/
-
-    - name: Choose terraform workspace
+    - name: Configure Elastic Container Registry credentials
       run: |
-        workspaces=$(terraform workspace list)
- 
-        if echo "$workspaces" | grep -q "$GITHUB_ENV"; then
-          terraform workspace select "$GITHUB_ENV"
-        else
-          echo "$GITHUB_ENV workspace does not exist. Creating it..."
-          terraform workspace new "$GITHUB_ENV"
-          terraform workspace select "$GITHUB_ENV"
-        fi
+          aws configure set aws_access_key_id ${{ secrets.AWS_ACCES_KEY }} --region us-east-1       
+          aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCES_KEY }} --region us-east-1
+    
+    - name: Set up Terraform
+      uses: hashicorp/setup-terraform@v1
+      with:
+          aws_access_key_id: ${{ secrets.AWS_ACCES_KEY }}
+          aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCES_KEY }}
 
-      - name: Build infrastructure
-        run: |
-          terraform plan -var-file="variables/${GITHUB_ENV}.tfvars" 
- 
+    - name: Terrform initialization
+      run: terraform init
+      working-directory: src/
+
+  - name: Choose terraform workspace
+    run: |
+      workspaces=$(terraform workspace list)
+
+      if echo "$workspaces" | grep -q "$GITHUB_ENV"; then
+        terraform workspace select "$GITHUB_ENV"
+      else
+        echo "$GITHUB_ENV workspace does not exist. Creating it..."
+        terraform workspace new "$GITHUB_ENV"
+        terraform workspace select "$GITHUB_ENV"
+      fi
+
+    - name: Build infrastructure
+      run: |
+        terraform plan -var-file="variables/${GITHUB_ENV}.tfvars" 

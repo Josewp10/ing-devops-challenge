@@ -31,10 +31,10 @@ jobs:
 
     - name: Terrform initialization
       run: terraform init
-      working-directory: ./scr/
+      working-directory: src
 
     - name: Choose terraform workspace
-      working-directory: ./scr/
+      working-directory: src/
       run: |
         workspaces=$(terraform workspace list)
 
@@ -47,12 +47,12 @@ jobs:
         fi
 
     - name: Plan infrastructure
-      working-directory: ./scr/
+      working-directory: src/
       run: |
-        terraform plan --auto-approve -var-file="variables/${{ env.BRANCH_NAME }}.tfvars"
+        terraform plan -var-file="variables/${{ env.BRANCH_NAME }}.tfvars"
     
     - name: Create infrastructure
-      working-directory: ./scr/
+      working-directory: src/
       run: |
         terraform apply --auto-approve -var-file="variables/${{ env.BRANCH_NAME }}.tfvars"
 

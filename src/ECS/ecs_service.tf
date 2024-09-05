@@ -17,8 +17,8 @@ resource "aws_ecs_service" "ecs_service_webserver" {
 
   load_balancer {
     target_group_arn = var.aws_elb_target_group_arn
-    container_name   = var.aws_ecs_container_name
-    container_port   = 80
+    container_name   = var.aws_ecs_container_one_name
+    container_port   = 3001
   }
 
 

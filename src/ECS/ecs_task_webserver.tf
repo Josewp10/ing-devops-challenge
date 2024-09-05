@@ -14,15 +14,31 @@ resource "aws_ecs_task_definition" "webserver" {
 
   container_definitions = jsonencode([
     {
-      name        = var.aws_ecs_container_name
-      image       = "${var.aws_ecr_repository_url}:devops-udem"
+      name        = var.aws_ecs_container_one_name
+      image       = "${var.aws_ecr_repository_url}:${var.container_one_tag}"
       cpu         = 0
       essential   = true
       portMappings = [
         {
-          name          = "80"
-          containerPort = 80
-          hostPort      = 80
+          name          = "3001"
+          containerPort = 3001
+          hostPort      = 3001
+          protocol      = "tcp"
+          appProtocol   = "http"
+        }
+      ]
+      logConfiguration = var.aws_task_definition_logs_configuration
+    },
+    {
+      name        = var.aws_ecs_container_two_name
+      image       = "${var.aws_ecr_repository_url}:${var.container_two_tag}"
+      cpu         = 0
+      essential   = true
+      portMappings = [
+        {
+          name          = "3002"
+          containerPort = 3002
+          hostPort      = 3002
           protocol      = "tcp"
           appProtocol   = "http"
         }

@@ -3,7 +3,7 @@ name: Terraform IaaC
 on:
   push:
     branches:
-      - none
+      - analyis
 
 jobs:
  IaC:
@@ -31,7 +31,19 @@ jobs:
         run: terraform init
         working-directory: src/
 
+    - name: Choose terraform workspace
+      run: |
+        workspaces=$(terraform workspace list)
+ 
+        if echo "$workspaces" | grep -q "$GITHUB_ENV"; then
+          terraform workspace select "$GITHUB_ENV"
+        else
+          echo "$GITHUB_ENV workspace does not exist. Creating it..."
+          terraform workspace new "$GITHUB_ENV"
+          terraform workspace select "$GITHUB_ENV"
+        fi
+
       - name: Build infrastructure
         run: |
-          terraform validate 
+          terraform plan -var-file="variables/${GITHUB_ENV}.tfvars" 
  

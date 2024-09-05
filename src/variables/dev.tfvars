@@ -9,6 +9,14 @@ ecs_task_execution_role_name="finaktiva-ecs-task-execution-role"
 ecs_task_role_name = "finaktiva-ecs-task-role"
 ecs_service_role_name= "finaktiva-ecs-service-role-dev"
 aws_elb_name="finaktiva-dev-elb"
-/*ecs_task_definition = {
-    
-}*/
+aws_task_definition_logs_configuration = {
+        logDriver = "awslogs"
+        options = {
+          "awslogs-group"         = "/amazon-ecs/container_logs/log"
+          "awslogs-region"        = "us-east-1"
+          "awslogs-stream-prefix" = "ecs"
+          "mode"                  = "non-blocking"
+          "awslogs-create-group"  = "true"
+          "max-buffer-size"       = "25m"
+        }
+}

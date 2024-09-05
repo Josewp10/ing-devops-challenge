@@ -59,3 +59,12 @@ variable "aws_task_definition_logs_configuration" {
     options   = map(string)
   })
 }
+
+variable "container_one_tag" {
+  type = string
+  default = "container_one"
+}
+variable "container_two_tag" {
+  type = string
+  default = "container_two"
+}

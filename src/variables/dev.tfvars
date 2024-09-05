@@ -1,14 +1,24 @@
 aws_region= "us-east-1"
 aws_account_id= "308516746479"
+
+/////////// VPC ///////////
 vpc_name= "finaktiva-vpc"
 vpc_sg_name="finaktiva-sg"
 vpc_availability_zones= ["us-east-1a", "us-east-1b", "us-east-1c", "us-east-1d", "us-east-1e", "us-east-1f"]
-ecr_private_repo_name= "finaktiva"
-ecs_cluster_name= "finaktiva-cluster"
-ecs_task_execution_role_name="finaktiva-ecs-task-execution-role"
-ecs_task_role_name = "finaktiva-ecs-task-role"
+
+/////////// ECR //////////////
+ecr_private_repo_name= "finaktiva-dev"
+
+////// Load Balancer /////////7
+aws_elb_name="finaktiva-elb-dev"
+
+//////// ECS ///////////////
+ecs_cluster_name= "finaktiva-cluster-dev"
+ecs_task_execution_role_name="finaktiva-ecs-task-execution-role-dev"
+ecs_task_role_name = "finaktiva-ecs-task-role-dev"
 ecs_service_role_name= "finaktiva-ecs-service-role-dev"
-aws_elb_name="finaktiva-dev-elb"
+container_one_tag="devops-udem"
+container_two_tag="devops-udem-2"
 aws_task_definition_logs_configuration = {
         logDriver = "awslogs"
         options = {
@@ -20,3 +30,4 @@ aws_task_definition_logs_configuration = {
           "max-buffer-size"       = "25m"
         }
 }
+

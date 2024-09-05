@@ -42,11 +42,13 @@ module "ecs" {
   aws_task_definition_logs_configuration = var.aws_task_definition_logs_configuration
   ecs_task_role_name = var.ecs_task_role_name
   ecs_service_role_name = var.ecs_service_role_name
+  container_one_tag = var.container_one_tag
+  container_two_tag = var.container_two_tag
 
   aws_vpc_id = module.vpc.vpc_id
   aws_private_subnet_id = module.vpc.private_subnet_id
   aws_public_subnet_id = module.vpc.public_subnet_id
-  aws_sg_id = module.vpc.sg_id
+  aws_sg_id = module.vpc.ecs_sg_id
 
   aws_elb_arn = module.elb.aws_elb_arn
   aws_elb_target_group_arn = module.elb.aws_elb_target_group_arn
@@ -65,5 +67,5 @@ module "elb" {
   aws_vpc_id = module.vpc.vpc_id
   aws_private_subnet_id = module.vpc.private_subnet_id
   aws_public_subnet_id = module.vpc.public_subnet_id
-  aws_sg_id = module.vpc.sg_id
+  aws_sg_id = module.vpc.load_balancer_sg_id
 }

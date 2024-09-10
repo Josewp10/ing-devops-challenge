@@ -1,3 +1,29 @@
+///////////////////// LOAD BALANCER SECURITY GROUP ///////////
+resource "aws_security_group" "load_balancer_sg" {
+  name        = "load-balancer-security-group"
+  description = "Allow TLS inbound traffic and all outbound traffic"
+  vpc_id      = aws_vpc.vpc.id
+
+  egress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"  # All protocols
+  }
+
+  ingress {
+    cidr_blocks = ["0.0.0.0/0"]
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"  # All protocols
+  }
+  tags = {
+    Name = "load-balancer-security-group"
+  }
+}
+
+
+////////////////// ECS SECURITY GROUP ////////////////
 resource "aws_security_group" "ecs_sg" {
   name        = var.vpc_sg_name
   description = "Allow TLS inbound traffic and all outbound traffic"
@@ -8,6 +34,15 @@ resource "aws_security_group" "ecs_sg" {
     from_port   = 0
     to_port     = 0
     protocol    = "-1"  # All protocols
+  }
+
+  ingress {
+    from_port   = 80
+    to_port     = 80
+    protocol    = "tcp"
+    security_groups = [
+      aws_security_group.load_balancer_sg.id
+    ]
   }
 
   tags = {
@@ -40,13 +75,3 @@ resource "aws_vpc_security_group_ingress_rule" "ecs_sg_http" {
 
 
 
-///////////////////// LOAD BALANCER SECURITY GROUP ///////////
-resource "aws_security_group" "load_balancer_sg" {
-  name        = "load-balancer-security-group"
-  description = "Allow TLS inbound traffic and all outbound traffic"
-  vpc_id      = aws_vpc.vpc.id
-
-  tags = {
-    Name = "load-balancer-security-group"
-  }
-}

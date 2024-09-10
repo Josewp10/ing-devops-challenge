@@ -4,6 +4,7 @@ resource "aws_ecs_service" "ecs_service_webserver" {
   task_definition = aws_ecs_task_definition.webserver.arn
   desired_count   = 1
   launch_type = "FARGATE"
+  //platform_version = "1.3.0"
 
   deployment_controller {
     type = "ECS"

@@ -7,9 +7,15 @@ variable "vpc_cidr" {
   default = "10.0.0.0/16"
 }
 
-variable "public_subnet_cidr" {
+variable "public_subnet_a_cidr" {
   type = string
   default = "10.0.16.0/20"
+}
+
+
+variable "public_subnet_b_cidr" {
+  type = string
+  default = "10.0.144.0/20"
 }
 
 variable "private_subnet_cidr" {

@@ -10,7 +10,7 @@ resource "aws_ecs_service" "ecs_service_webserver" {
   }
 
   network_configuration {
-      subnets = [ var.aws_public_subnet_id ]
+      subnets = var.aws_public_subnet_id
       security_groups = [ var.aws_sg_id ]
       assign_public_ip = true
   }

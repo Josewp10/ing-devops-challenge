@@ -20,7 +20,7 @@ resource "aws_ecs_task_definition" "webserver" {
       essential   = true
       portMappings = [
         {
-          name          = "3001"
+          name          = "http3001"
           containerPort = 3001
           hostPort      = 3001
           protocol      = "tcp"
@@ -28,7 +28,7 @@ resource "aws_ecs_task_definition" "webserver" {
         }
       ]
       logConfiguration = var.aws_task_definition_logs_configuration
-    },
+    }/*,
     {
       name        = var.aws_ecs_container_two_name
       image       = "${var.aws_ecr_repository_url}:${var.container_two_tag}"
@@ -44,7 +44,7 @@ resource "aws_ecs_task_definition" "webserver" {
         }
       ]
       logConfiguration = var.aws_task_definition_logs_configuration
-    }
+    }*/
   ])
 
   tags = {}

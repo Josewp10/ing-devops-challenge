@@ -1,2 +1,4 @@
 .env
 .terraform*
+Terraform/variables/*.tfvars
+!Terraform/variables/example.tfvars

@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  # VPC
+  vpcName:
+    Type: String
+    Default: custom-cf-vpc
+  vpcCidrBlock:
+    Type: String
+    Default: 10.0.0.0/16
+  vpcDnsSupport:
+    Type: String
+    Default: true
+    AllowedValues: 
+      - true
+      - false
+  vpcDnsHostnames:
+    Type: String
+    Default: true
+    AllowedValues: 
+      - true
+      - false
+  # Templates
+  awsVpcTemplateUrl:
+    Type: String
+    Default: 'https://iac-practice-bucket.s3.us-east-1.amazonaws.com/cloudformation/Networking/VPC/VPC.yml'
+
+Resources:
+  VPCStack:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref awsVpcTemplateUrl
+      Parameters:
+        name: !Ref vpcName
+        cidrBlock: !Ref vpcCidrBlock
+        dnsSupport: !Ref vpcDnsSupport
+        dnsHostnames: !Ref vpcDnsHostnames

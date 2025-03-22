@@ -1,0 +1,46 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  name:
+    Type: String
+    Default: custom-cf-vpc
+  cidrBlock:
+    Type: String
+    Default: 10.0.0.0/16
+  dnsSupport:
+    Type: String
+    Default: true
+    AllowedValues: 
+      - true
+      - false
+  dnsHostnames:
+    Type: String
+    Default: true
+    AllowedValues: 
+      - true
+      - false
+
+Resources:
+  VPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: !Ref cidrBlock
+      EnableDnsSupport: !Ref dnsSupport
+      EnableDnsHostnames: !Ref dnsHostnames
+      Tags:
+       - Key: Name
+         Value: !Ref name
+
+Outputs:
+  VpcId: 
+    Value: !GetAtt VPC.VpcId
+    Export:
+      Name: !Sub "${AWS::StackName}-Id"
+  DefaultSecurityGroup:
+    Value: !GetAtt VPC.DefaultSecurityGroup
+    Export:
+      Name: !Sub "${AWS::StackName}-DefaultSecurityGroup"
+  CidrBlock:
+    Value: !GetAtt VPC.CidrBlock
+    Export:
+      Name: !Sub "${AWS::StackName}-CidrBlock"

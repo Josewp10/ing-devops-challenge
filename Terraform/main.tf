@@ -17,4 +17,5 @@ provider "aws" {
 module "vpc" {
   source = "./Networking/VPC"
   vpc_name = var.vpc_name
+  subnets_map = var.subnets_map
 }

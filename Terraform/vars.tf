@@ -22,3 +22,8 @@ variable "subnets_map" {
   default = {}
   
 }
+
+variable "subnets_association_list" {
+  type = list(string)
+  description = "List of subnet names to associate with the route table"
+}

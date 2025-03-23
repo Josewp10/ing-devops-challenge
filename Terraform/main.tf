@@ -18,4 +18,5 @@ module "vpc" {
   source = "./Networking/VPC"
   vpc_name = var.vpc_name
   subnets_map = var.subnets_map
+  subnets_association_list = var.subnets_association_list
 }

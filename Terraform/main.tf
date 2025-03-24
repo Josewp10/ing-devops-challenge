@@ -16,7 +16,15 @@ provider "aws" {
 
 module "vpc" {
   source = "./Networking/VPC"
-  vpc_name = var.vpc_name
+  vpc_map = var.vpc_map
   subnets_map = var.subnets_map
-  subnets_association_list = var.subnets_association_list
+  route_table_map = var.route_table_map
+  route_table_association_map = var.route_table_association_map
+  internet_gw_map = var.internet_gw_map
 }
+/*
+module "sg" {
+  source = "./Networking/SecurityGroups"
+  security_group_map = var.security_group_map
+}
+*/

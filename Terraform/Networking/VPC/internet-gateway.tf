@@ -1,7 +1,12 @@
 resource "aws_internet_gateway" "gw" {
-  vpc_id = aws_vpc.vpc.id
+  for_each = var.internet_gw_map
+  vpc_id = lookup(
+    { for key, value in aws_vpc.vpc : value.tags["Name"] => value.id },
+    each.value.vpc_name,
+    null
+  )
 
   tags = {
-    Name = "${var.vpc_name}-ig"
+    Name = each.value.name
   }
 }

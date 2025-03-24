@@ -1,9 +1,15 @@
 resource "aws_route_table_association" "subnets_associations" {
-  for_each = { 
-    for key, value in aws_subnet.subnet : key => value.id 
-    if contains(var.subnets_association_list, key)
-  }
+  for_each = var.route_table_association_map
 
-  subnet_id      = each.value
-  route_table_id = aws_route_table.route_table.id
+  subnet_id      =  lookup(
+      { for key, value in aws_subnet.subnet : value.tags["Name"] => value.id },
+      each.value.subnet_name,
+      null
+    )
+
+  route_table_id =  lookup(
+      { for key, value in aws_route_table.route_table : value.tags["Name"] => value.id },
+      each.value.route_table_name,
+      null
+    )
 }

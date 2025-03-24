@@ -22,9 +22,9 @@ module "vpc" {
   route_table_association_map = var.route_table_association_map
   internet_gw_map = var.internet_gw_map
 }
-/*
+
 module "sg" {
   source = "./Networking/SecurityGroups"
   security_group_map = var.security_group_map
+  vpc_map = module.vpc.vpc_map
 }
-*/

@@ -6,3 +6,8 @@ variable "security_group_map" {
 }))
   default = {}
 }
+
+variable "vpc_map" {
+  description = "A map of VPCs"
+  type        = map(any)
+}

@@ -1,5 +1,5 @@
-output "vpc_id" {
-  value = { for key, val in aws_vpc.vpc : key => val.id }
+output "vpc_map" {
+  value = { for key, val in aws_vpc.vpc : key => val }
 }
 
 output "subnet_ids" {

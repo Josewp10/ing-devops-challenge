@@ -1,11 +1,3 @@
-output "aws_elb_arn" {
-  value = aws_lb.aws_project_elb.arn
-}
-
-output "aws_elb_target_group_arn" {
-  value = aws_lb_target_group.target_group.arn
-}
-
-output "aws_elb_listener" {
-  value = aws_lb_listener.webserver
+output "lb_map_out" {
+    value = {for key, val in aws_lb.aws_elb : key => val }  
 }

@@ -26,6 +26,6 @@ module "vpc" {
 module "sg" {
   source = "./Networking/SecurityGroups"
   security_group_map = var.security_group_map
-  vpc_map = module.vpc.vpc_map
+  vpc_map = module.vpc.vpc_map_out
   security_group_rule_map =  var.security_group_rule_map 
 }

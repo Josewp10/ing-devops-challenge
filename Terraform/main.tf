@@ -38,3 +38,9 @@ module "lb" {
   lb_target_group_map = var.lb_target_group_map
   vpc_map = module.vpc.vpc_map_out
 }
+
+module "ecs" {
+  source = "./Compute/ECS"
+  ecs_cluster_map = var.ecs_cluster_map
+  ecs_task_definition_map = var.ecs_task_definition_map
+}

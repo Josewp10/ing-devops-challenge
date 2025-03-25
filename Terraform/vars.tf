@@ -109,3 +109,27 @@ variable "lb_listener" {
 }
 
 
+variable "ecs_cluster_map" {
+  type = map(object({
+    name = string
+  }))
+}
+
+variable "ecs_task_definition_map" {
+  type = map(object({
+    family = string
+    network_mode = string
+    requires_compatibilities = list(string)
+    cpu = string
+    memory = string
+    cpu_architecture = string
+    operating_system_family = string
+    container_name= string
+    container_image = string
+    container_port_name = string
+    container_port = number
+    hostPort = number
+    protocol =string
+    appProtocol = string
+  }))
+}

@@ -14,13 +14,13 @@ resource "aws_lb_target_group" "target_group" {
 
   health_check {
     enabled = true
-    healthy_threshold = 3
-    interval = 10
+    healthy_threshold = 5
+    interval = 30
     matcher = 200
     path = each.value.health_check_path
-    port = each.value.port
+    port = "traffic-port"//each.value.port
     protocol = each.value.protocol
-    timeout = 3
+    timeout = 5
     unhealthy_threshold = 2
   }
   tags = {

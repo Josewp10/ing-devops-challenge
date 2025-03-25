@@ -22,6 +22,18 @@ variable "lb_target_group_map" {
      health_check_path = string
   }))
 }
+
+variable "lb_listener_map" {
+  type = map(object({
+    lb_name = string
+    protocol = string
+    port = string
+    target_group_name =string
+    acction_type = string
+  }))
+  default = { }
+}
+
 /*
 variable "aws_lb_target_group_attachment_map" {
   type = map(object({
@@ -30,16 +42,7 @@ variable "aws_lb_target_group_attachment_map" {
     port=number
   }))
 }
-variable "lb_listener_map" {
-  type = map(object({
-    lb_arn = string
-    protocol = string
-    port = string
-    target_group_arn =string
-    type = string
-  }))
-  default = { }
-}
+
 */
 variable "vpc_map" {
   description = "A map of SGs"

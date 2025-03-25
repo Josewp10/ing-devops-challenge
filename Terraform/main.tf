@@ -37,6 +37,7 @@ module "lb" {
   subnets_map = module.vpc.subnet_map_out
   lb_target_group_map = var.lb_target_group_map
   vpc_map = module.vpc.vpc_map_out
+  lb_listener_map = var.lb_listener_map
 }
 
 module "ecs" {

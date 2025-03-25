@@ -97,13 +97,13 @@ variable "lb_target_group_map" {
   }))
 }
 
-variable "lb_listener" {
+variable "lb_listener_map" {
   type = map(object({
-    lb_arn = string
+    lb_name = string
     protocol = string
     port = string
-    target_group_arn =string
-    type = string
+    target_group_name =string
+    acction_type = string
   }))
   default = { }
 }

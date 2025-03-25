@@ -72,3 +72,16 @@ variable "security_group_rule_map" {
 }))
   default = {}
 }
+
+variable "lb_map" {
+  type = map(object({
+    name = string,
+    internal=bool
+    type = string,
+    security_group_names= list(string)
+    subnet_names = list(string)
+    enable_deletion_protection = bool
+    drop_invalid_header_fields = bool
+}))
+  default = {}
+}

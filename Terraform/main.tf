@@ -29,3 +29,10 @@ module "sg" {
   vpc_map = module.vpc.vpc_map_out
   security_group_rule_map =  var.security_group_rule_map 
 }
+
+module "lb" {
+  source = "./Networking/LoadBalancer"
+  lb_map = var.lb_map
+  sg_map = module.sg.sg_map_out
+  subnets_map = module.vpc.subnet_map_out
+}

@@ -1,14 +1,3 @@
-/*variable "aws_vpc_id" { }
-variable "aws_private_subnet_id" {}
-variable "aws_public_subnet_id" {}
-variable "aws_sg_id" {}
-
-variable "aws_elb_name" {}
-
-variable "aws_elb_type" {
-  type = string
-  default = "application"
-}*/
 
 variable "lb_map" {
   type = map(object({
@@ -21,6 +10,40 @@ variable "lb_map" {
     drop_invalid_header_fields = bool
 }))
   default = {}
+}
+
+variable "lb_target_group_map" {
+  type = map(object({
+    name = string
+    port = number
+    protocol = string
+    vpc_name = string
+     target_type = string
+     health_check_path = string
+  }))
+}
+/*
+variable "aws_lb_target_group_attachment_map" {
+  type = map(object({
+    target_group_arn=string
+    target_id=string
+    port=number
+  }))
+}
+variable "lb_listener_map" {
+  type = map(object({
+    lb_arn = string
+    protocol = string
+    port = string
+    target_group_arn =string
+    type = string
+  }))
+  default = { }
+}
+*/
+variable "vpc_map" {
+  description = "A map of SGs"
+  type        = map(any)
 }
 
 variable "sg_map" {

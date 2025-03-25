@@ -85,3 +85,27 @@ variable "lb_map" {
 }))
   default = {}
 }
+
+variable "lb_target_group_map" {
+  type = map(object({
+    name = string
+    port = number
+    protocol = string
+    vpc_name = string
+     target_type = string
+     health_check_path = string
+  }))
+}
+
+variable "lb_listener" {
+  type = map(object({
+    lb_arn = string
+    protocol = string
+    port = string
+    target_group_arn =string
+    type = string
+  }))
+  default = { }
+}
+
+

@@ -1,0 +1,93 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+    loadBalancerName:
+      Type: String
+    loadBalancerIpAddressType:
+      Type: String
+      Default: ipv4
+      AllowedValues:
+        - ipv4
+        - dualstack
+        - dualstack-without-public-ipv4
+    loadBalancerType:
+      Type: String
+      Default: application
+      AllowedValues:
+        - application
+        - network
+        - gateway
+    loadBalancerSubnets:
+      Type: CommaDelimitedList
+      Default: ""
+    loadBalancerSecurityGroups:
+      Type: CommaDelimitedList
+      Default: ""
+    #Listener
+    listenerPort: 
+      Type: Number
+    listenerProtocol:
+      Type: String
+      AllowedValues:
+        - HTTP 
+        - HTTPS 
+        - TCP
+        - TLS
+        - UDP
+        - TCP_UDP
+        - GENEVE      
+    #Security Group
+    securityGroupSshCidrIp:
+      Type: String
+      Default: 0.0.0.0/0
+    securityGroupHttpCidrIp:
+      Type: String
+      Default: 0.0.0.0/0
+    securityGroupHttpsCidrIp:
+      Type: String
+      Default: 0.0.0.0/0
+
+    awsLoadBalancerTemplateURL:
+      Type: String
+      Default: 'https://imagineapps-marketplace-cloudformation-templates.s3.us-east-1.amazonaws.com/LoadBalancer/load-balancer.yml'
+    awsSecurityGroupTemplateURL:
+      Type: String
+      Default: 'https://imagineapps-marketplace-cloudformation-templates.s3.us-east-1.amazonaws.com/VPC/security-group.yml'
+    awsLoadBalancerListenerTemplateURL:
+      Type: String
+      Default: 'https://imagineapps-marketplace-cloudformation-templates.s3.us-east-1.amazonaws.com/LoadBalancer/load-balancer-listener.yml'
+   
+
+Resources:
+  awsLoadBalancerSecurityGroup:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref awsSecurityGroupTemplateURL
+      Parameters:
+        sshCidrIp: !Ref securityGroupSshCidrIp
+        httpCidrIp: !Ref securityGroupHttpCidrIp
+        httpsCidrIp: !Ref securityGroupHttpsCidrIp
+
+  awsLoadBalancer:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref awsLoadBalancerTemplateURL
+      Parameters:
+        loadBalancerName: !Ref loadBalancerName
+        ipAddressType: !Ref loadBalancerIpAddressType
+        subnets: !Ref loadBalancerSubnets
+        securityGroups: !Sub 
+            - 'origin-access-identity/cloudfront/${CloudfrontS3OAI}'
+            - CloudfrontS3OAI: !ImportValue 
+                Fn::Sub: "${oaiStackName}-Id"
+        loadBalancerType: !Ref loadBalancerType
+!Select [1, !Split ["/", !Ref oaiAdmin]]
+
+  awsLoadBalancerHttpListener:
+    Type: AWS::CloudFormation::Stack
+    Properties:
+      TemplateURL: !Ref awsLoadBalancerListenerTemplateURL
+      Parameters:
+        LoadBalancerARN: !Ref awsLoadBalancer
+        ListenerPort: !Ref listenerPort
+        ListenerProtocol: !Ref listenerProtocol

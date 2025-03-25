@@ -1,0 +1,41 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  sshCidrIp:
+    Type: String
+    Default: 0.0.0.0/0
+  httpCidrIp:
+    Type: String
+    Default: 0.0.0.0/0
+  httpsCidrIp:
+    Type: String
+    Default: 0.0.0.0/0
+
+Resources:
+  SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Ref securityGroupName
+      VpcId: !Ref vpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: !Ref sshCidrIp
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: !Ref httpCidrIp
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: !Ref httpsCidrIp
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+
+Outputs:
+  SecurityGroupId:
+    Value: !GetAtt SecurityGroup.GroupId
+    Export:
+      Name: !Sub "${AWS::StackName}-SecurityGroupId"

@@ -1,0 +1,81 @@
+aws acm list-certificates
+
+{
+    "CertificateSummaryList": [
+        {
+            "CertificateArn": "arn:aws:acm:us-east-1:195275648900:certificate/d13d280f-d1c1-48d1-889b-dfdef2051dcc",
+            "DomainName": "kuido-web-develop.imagineapps.co",
+            "SubjectAlternativeNameSummaries": [
+                "kuido-web-develop.imagineapps.co"
+            ],
+            "HasAdditionalSubjectAlternativeNames": false,
+            "Status": "PENDING_VALIDATION",
+            "Type": "AMAZON_ISSUED",
+            "KeyAlgorithm": "RSA-2048",
+            "KeyUsages": [],
+            "ExtendedKeyUsages": [],
+            "InUse": false,
+            "RenewalEligibility": "INELIGIBLE",
+            "CreatedAt": "2025-03-07T02:38:48.291000+00:00"
+        }
+    ]
+}
+(END)
+
+~ $ aws acm describe-certificate --certificate-arn "arn:aws:acm:us-east-1:195275648900:certificate/d13d280f-d1c1-48d1-889b-dfdef2051dcc"
+{
+    "Certificate": {
+        "CertificateArn": "arn:aws:acm:us-east-1:195275648900:certificate/d13d280f-d1c1-48d1-889b-dfdef2051dcc",
+        "DomainName": "kuido-web-develop.imagineapps.co",
+        "SubjectAlternativeNames": [
+            "kuido-web-develop.imagineapps.co"
+        ],
+        "DomainValidationOptions": [
+            {
+                "DomainName": "kuido-web-develop.imagineapps.co",
+                "ValidationDomain": "kuido-web-develop.imagineapps.co",
+                "ValidationStatus": "SUCCESS",
+                "ResourceRecord": {
+                    "Name": "_125e186374333dc52b67697f6b1848e3.kuido-web-develop.imagineapps.co.",
+                    "Type": "CNAME",
+                    "Value": "_4186d4e64884d504a1b462dbb8453434.xlfgrmvvlj.acm-validations.aws."
+                },
+                "ValidationMethod": "DNS"
+            }
+        ],
+        "Serial": "02:3e:d0:bc:72:bd:d4:cd:98:49:62:b0:21:99:2d:d6",
+        "Subject": "CN=kuido-web-develop.imagineapps.co",
+        "Issuer": "Amazon",
+        "CreatedAt": "2025-03-07T02:38:48.291000+00:00",
+        "IssuedAt": "2025-03-07T02:44:00.972000+00:00",
+        "Status": "ISSUED",
+        "NotBefore": "2025-03-07T00:00:00+00:00",
+        "NotAfter": "2026-04-06T23:59:59+00:00",
+        "KeyAlgorithm": "RSA-2048",
+        "SignatureAlgorithm": "SHA256WITHRSA",
+        "InUseBy": [],
+        "Type": "AMAZON_ISSUED",
+        "KeyUsages": [
+            {
+                "Name": "DIGITAL_SIGNATURE"
+            },
+            {
+                "Name": "KEY_ENCIPHERMENT"
+            }
+        ],
+        "ExtendedKeyUsages": [
+            {
+                "Name": "TLS_WEB_SERVER_AUTHENTICATION",
+                "OID": "1.3.6.1.5.5.7.3.1"
+            },
+            {
+                "Name": "TLS_WEB_CLIENT_AUTHENTICATION",
+                "OID": "1.3.6.1.5.5.7.3.2"
+            }
+        ],
+        "RenewalEligibility": "INELIGIBLE",
+        "Options": {
+            "CertificateTransparencyLoggingPreference": "ENABLED"
+        }
+    }
+}

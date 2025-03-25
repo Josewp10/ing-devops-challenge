@@ -1,0 +1,31 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  LoadBalancerARN:
+    Type: String
+  ListenerPort: 
+    Type: Number
+  ListenerProtocol:
+    Type: String
+    AllowedValues:
+      - HTTP 
+      - HTTPS 
+      - TCP
+      - TLS
+      - UDP
+      - TCP_UDP
+      - GENEVE
+  
+  
+Resources:
+  LoadBalancerListener:
+    Type: AWS::ElasticLoadBalancingV2::Listener
+    Properties:
+      #Certificates: 
+      #  - Certificate
+      #DefaultActions: 
+      #  - Action
+      LoadBalancerArn: !Ref LoadBalancerARN
+      Port: !Ref ListenerPort
+      Protocol: !Ref ListenerProtocol
+      #SslPolicy: String

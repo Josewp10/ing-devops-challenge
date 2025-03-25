@@ -1,0 +1,17 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  userName:
+    Type: String
+
+Resources:
+  iamUser:
+    Type: AWS::IAM::User
+    Properties:
+      UserName: !Ref userName
+
+Outputs:
+  iamUserARN:
+    Value: !GetAtt iamUser.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-arn"

@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  ec2StackName:
+    Type: String
+
+Resources:
+  EC2ElasticIP:
+    DeletionPolicy: Retain
+    Type: AWS::EC2::EIP
+    Properties:
+      InstanceId: !ImportValue 
+        Fn::Sub: "${ec2StackName}-InstanceId"
+      Tags: 
+        - Key: InstanceId
+          Value: !ImportValue 
+            Fn::Sub: "${ec2StackName}-InstanceId"
+
+Outputs:
+  PublicIp:
+    Value: !GetAtt EC2ElasticIP.PublicIp
+    Export:
+      Name: !Sub "${AWS::StackName}-PublicIp"
+  AllocationId:
+    Value: !GetAtt EC2ElasticIP.AllocationId
+    Export:
+      Name: !Sub "${AWS::StackName}-AllocationId"

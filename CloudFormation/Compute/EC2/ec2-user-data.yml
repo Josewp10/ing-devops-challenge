@@ -1,0 +1,109 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  instanceName:
+    Type: String
+  vpcId:
+    Type: String
+  securityGroupName:
+    Type: String
+  ec2KeyName:
+    Type: String
+  PublicSubnetId:
+    Type: String
+  ec2InstanceType:
+    Type: String
+    AllowedValues:
+      - t2.micro
+      - t3a.micro
+      - t3a.small
+      - t3a.medium
+      - t3a.large
+      - t3a.xlarge
+  LatestAmiId:
+    Type: 'AWS::SSM::Parameter::Value<AWS::EC2::Image::Id>'
+    Default: '/aws/service/ami-amazon-linux-latest/amzn2-ami-hvm-x86_64-gp2'
+    #Default: '/aws/service/canonical/ubuntu/server/focal/stable/current/amd64/hvm/ebs-gp2/ami-id'
+    #Default: '/aws/service/canonical/ubuntu/server/jammy/stable/current/amd64/hvm/ebs-gp2/ami-id'
+
+Resources:
+  Ec2SecurityGroup:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: !Ref securityGroupName
+      VpcId: !Ref vpcId
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 22
+          ToPort: 22
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 80
+          ToPort: 80
+          CidrIp: 0.0.0.0/0
+        - IpProtocol: tcp
+          FromPort: 443
+          ToPort: 443
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: "-1"
+          CidrIp: 0.0.0.0/0
+    
+  EC2KeyPem:
+    Type: AWS::EC2::KeyPair
+    Properties:
+      KeyName: !Ref ec2KeyName
+
+  Ec2Instance:
+    Type: 'AWS::EC2::Instance'
+    DependsOn:
+      - EC2KeyPem
+      - Ec2SecurityGroup
+    Properties: 
+      ImageId: !Ref LatestAmiId
+      InstanceType: !Ref ec2InstanceType
+      KeyName: !Ref ec2KeyName 
+      NetworkInterfaces:
+        - AssociatePublicIpAddress: 'true'
+          DeleteOnTermination: 'true'
+          DeviceIndex: 0
+          SubnetId: !Ref PublicSubnetId
+          GroupSet:
+            - !GetAtt Ec2SecurityGroup.GroupId
+      Tags:
+        - Key: Name
+          Value: !Ref instanceName
+      UserData:
+        Fn::Base64: |
+          #!/bin/bash
+          sudo yum update -y
+          sudo amazon-linux-extras install docker -y
+          sudo systemctl start docker
+          sudo systemctl enable docker
+          sudo usermod -a -G docker ec2-user
+          mkdir -p /usr/local/lib/docker/cli-plugins/
+          curl -SL https://github.com/docker/compose/releases/latest/download/docker-compose-linux-x86_64 -o /usr/local/lib/docker/cli-plugins/docker-compose
+          chmod +x /usr/local/lib/docker/cli-plugins/docker-compose
+          sudo amazon-linux-extras install epel -y
+          sudo amazon-linux-extras enable epel
+          sudo yum install -y epel-release
+          sudo yum install certbot nginx -y
+          sudo yum install certbot-nginx -y
+          sudo yum install htop -y
+          sudo openssl dhparam -out /etc/letsencrypt/ssl-dhparams.pem 2048
+          sudo systemctl restart nginx
+          
+Outputs:
+  InstanceId:
+    Value: !GetAtt Ec2Instance.InstanceId
+    Export:
+      Name: !Sub "${AWS::StackName}-InstanceId"
+  KeyPairId:
+    Value: !GetAtt EC2KeyPem.KeyPairId  
+    Export:
+      Name: !Sub "${AWS::StackName}-ec2KeyPairId"
+  SecurityGroupId:
+    Value: !GetAtt Ec2SecurityGroup.GroupId
+    Export:
+      Name: !Sub "${AWS::StackName}-Ec2SecurityGroupId"
+

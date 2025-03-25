@@ -1,0 +1,27 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  domainName:
+    Type: String
+  validationMethod:
+    Type: String
+    Default: DNS
+  keyAlgorithm: 
+    Type: String
+    Default: RSA_2048
+    AllowedValues:
+      - RSA_1024
+      - RSA_2048
+      - RSA_3072
+      - RSA_4096 
+      - EC_prime256v1
+      - EC_secp384r1
+      - EC_secp521r1
+  
+Resources:
+  ACM:
+    Type: AWS::CertificateManager::Certificate
+    Properties:
+      DomainName: !Ref domainName
+      KeyAlgorithm: !Ref keyAlgorithm
+      ValidationMethod: !Ref validationMethod

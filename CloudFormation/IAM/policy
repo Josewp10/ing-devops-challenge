@@ -1,0 +1,68 @@
+{
+	"Version": "2012-10-17",
+	"Statement": [
+		{
+			"Sid": "ListBuckets",
+			"Effect": "Allow",
+			"Action": [
+				"s3:ListAllMyBuckets"
+			],
+			"Resource": "*"
+		},
+		{
+			"Sid": "AdminOfBucket",
+			"Effect": "Allow",
+			"Action": [
+				"s3:GetObject",
+				"s3:PutObject"
+			],
+			"Resource": [
+				"arn:aws:s3:::sandya-develop-frontend",
+				"arn:aws:s3:::sandya-develop-frontend/*"
+			]
+		},
+		{
+			"Sid": "RestrictAccessOnlyToProjectBucket",
+			"Effect": "Deny",
+			"Action": [
+				"s3:GetObjectAcl",
+				"s3:GetObject",
+				"s3:GetObjectAttributes",
+				"s3:ListBucket"
+			],
+			"NotResource": [
+				"arn:aws:s3:::sandya-develop-frontend",
+				"arn:aws:s3:::sandya-develop-frontend/*"
+			]
+		},
+		{
+			"Effect": "Allow",
+			"Action": "cloudfront:CreateInvalidation",
+			"Resource": [
+				"arn:aws:cloudfront::863518452421:distribution/E1FSV74GGH4YAJ"
+			]
+		},
+		{
+			"Sid": "AllowECRPowerUserAccess",
+			"Effect": "Allow",
+			"Action": [
+				"ecr:GetAuthorizationToken",
+				"ecr:BatchCheckLayerAvailability",
+				"ecr:GetRepositoryPolicy",
+				"ecr:DescribeRepositories",
+				"ecr:ListImages",
+				"ecr:BatchGetImage",
+				"ecr:BatchDeleteImage",
+				"ecr:PutImage",
+				"ecr:InitiateLayerUpload",
+				"ecr:UploadLayerPart",
+				"ecr:CompleteLayerUpload",
+				"ecr:DeleteRepository",
+				"ecr:DeleteRepositoryPolicy",
+				"ecr:CreateRepository",
+				"ecr:GetDownloadUrlForLayer"
+			],
+			"Resource": "*"
+		}
+	]
+}

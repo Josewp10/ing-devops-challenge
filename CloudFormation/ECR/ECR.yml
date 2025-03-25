@@ -1,0 +1,22 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  ecrName:
+    Type: String
+
+Resources:
+  ECR:
+    DeletionPolicy: Delete
+    Type: AWS::ECR::Repository
+    Properties:
+      RepositoryName: !Ref ecrName
+
+Outputs:
+  ECRArn:
+    Value: !GetAtt ECR.Arn
+    Export:
+      Name: !Sub "${AWS::StackName}-Arn"
+  ECRRepositoryUri:
+    Value: !GetAtt ECR.RepositoryUri
+    Export:
+      Name: !Sub "${AWS::StackName}-RepositoryUri"

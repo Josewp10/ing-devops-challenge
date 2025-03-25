@@ -1,0 +1,54 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+
+Parameters:
+  s3BucketStackName:
+    Type: String
+  oaiStackName:
+    Type: String
+  viewerProtocol:
+    Type: String
+    Default: redirect-to-https
+    AllowedValues:
+    - allow-all
+    - https-only
+    - redirect-to-https
+
+Resources:
+  CloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins: 
+          - DomainName:  !ImportValue 
+              Fn::Sub: "${s3BucketStackName}-S3BucketDomainName"
+            Id: !ImportValue 
+                Fn::Sub: "${s3BucketStackName}-S3BucketName"
+            S3OriginConfig:
+              OriginAccessIdentity: !Sub 
+                  - 'origin-access-identity/cloudfront/${CloudfrontS3OAI}'
+                  - CloudfrontS3OAI: !ImportValue 
+                      Fn::Sub: "${oaiStackName}-Id"
+        Enabled: true
+        DefaultCacheBehavior:
+          AllowedMethods: 
+            - GET
+            - HEAD
+            - OPTIONS
+          TargetOriginId: !ImportValue 
+              Fn::Sub: "${s3BucketStackName}-S3BucketName"
+          ViewerProtocolPolicy: !Ref viewerProtocol
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+
+Outputs:
+  CloudFrontDistributionId:
+    Value: !GetAtt CloudFrontDistribution.Id
+    Export:
+      Name: !Sub "${AWS::StackName}-Id"
+  CloudFrontDistributionDomainName:
+    Value: !GetAtt CloudFrontDistribution.DomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-DomainName"

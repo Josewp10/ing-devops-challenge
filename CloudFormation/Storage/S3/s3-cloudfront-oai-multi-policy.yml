@@ -1,0 +1,62 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  s3BucketStackName:
+    Type: String
+  oaiAdminStackName:
+    Type: String
+  oaiWebStackName:
+    Type: String
+  oaiContentStackName:
+    Type: String
+  adminS3RootPath:
+    Type: String
+  webS3RootPath:
+    Type: String
+  contentS3RootPath:
+    Type: String
+
+Resources:
+  S3Policy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:  !ImportValue 
+        Fn::Sub: "${s3BucketStackName}-S3BucketName"
+      PolicyDocument: 
+        Statement:
+        - Action: 's3:GetObject'
+          Effect: Allow
+          Resource: 
+            !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !ImportValue 
+                      Fn::Sub: "${s3BucketStackName}-S3BucketName"
+                  - !Sub '/${adminS3RootPath}*'
+          Principal:
+            CanonicalUser: !ImportValue 
+              Fn::Sub: "${oaiAdminStackName}-S3CanonicalUserId"
+        - Action: 's3:GetObject'
+          Effect: Allow
+          Resource: 
+            !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !ImportValue 
+                      Fn::Sub: "${s3BucketStackName}-S3BucketName"
+                  - !Sub '/${webS3RootPath}*'
+          Principal:
+            CanonicalUser: !ImportValue 
+              Fn::Sub: "${oaiWebStackName}-S3CanonicalUserId"
+        - Action: 's3:GetObject'
+          Effect: Allow
+          Resource: 
+            !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !ImportValue 
+                      Fn::Sub: "${s3BucketStackName}-S3BucketName"
+                  - !Sub '/${contentS3RootPath}*'
+          Principal:
+            CanonicalUser: !ImportValue 
+              Fn::Sub: "${oaiContentStackName}-S3CanonicalUserId"

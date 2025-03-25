@@ -1,0 +1,28 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  s3BucketStackName:
+    Type: String
+  oaiStackName:
+    Type: String
+
+Resources:
+  S3Policy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket:  !ImportValue 
+        Fn::Sub: "${s3BucketStackName}-S3BucketName"
+      PolicyDocument: 
+        Statement:
+        - Action: 's3:GetObject'
+          Effect: Allow
+          Resource: 
+            !Join 
+                - ''
+                - - 'arn:aws:s3:::'
+                  - !ImportValue 
+                      Fn::Sub: "${s3BucketStackName}-S3BucketName"
+                  - '/*'
+          Principal:
+            CanonicalUser: !ImportValue 
+              Fn::Sub: "${oaiStackName}-S3CanonicalUserId"

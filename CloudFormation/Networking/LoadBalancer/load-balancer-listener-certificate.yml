@@ -1,0 +1,9 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Resources:
+  ListenerCertificate:
+    Type: AWS::ElasticLoadBalancingV2::ListenerCertificate
+    Properties:
+      Certificates: 
+        - Certificate
+      ListenerArn: String

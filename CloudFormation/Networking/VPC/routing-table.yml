@@ -1,0 +1,18 @@
+Resources:
+  PublicRouteTable:
+      Type: AWS::EC2::RouteTable
+      Properties:
+        VpcId: !ImportValue VpcId
+  
+  DefaultRoute:
+    Type: AWS::EC2::Route
+    Properties:
+      RouteTableId: !Ref PublicRouteTable
+      DestinationCidrBlock: 0.0.0.0/0
+      GatewayId: !ImportValue InternetGatewayId
+
+Outputs:
+  PublicRouteTableId:
+    Value: !GetAtt PublicRouteTable.RouteTableId
+    Export:
+      Name: PublicRouteTableId

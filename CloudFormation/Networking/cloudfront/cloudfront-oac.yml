@@ -1,0 +1,30 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+
+Parameters:
+  oacName:
+    Type: String
+  viewerProtocol:
+    Type: String
+    Default: redirect-to-https
+    AllowedValues:
+    - allow-all
+    - https-only
+    - redirect-to-https
+
+Resources:
+  CloudfrontS3OAI:
+    Type: AWS::CloudFront::OriginAccessControl
+    Properties:
+      OriginAccessControlConfig:
+        Description: "origin access control(OAC) for allowing cloudfront to access S3 bucket"
+        Name: !Ref oacName
+        OriginAccessControlOriginType: s3
+        SigningBehavior: always
+        SigningProtocol: sigv4
+
+Outputs:
+  OaiID:
+    Value: !GetAtt CloudfrontS3OAI.Id
+    Export:
+      Name: cloudFrontS3OaiID

@@ -1,0 +1,30 @@
+
+Resources:
+  PublicSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      CidrBlock: '10.0.1.0/24'
+      Tags: 
+        - Key: Name
+          Value: PublicSubnet
+      VpcId: !ImportValue VpcId
+
+  PublicSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      RouteTableId: !ImportValue PublicRouteTableId
+      SubnetId: !GetAtt PublicSubnet.SubnetId
+
+Outputs:
+  VpcId: 
+    Value: !GetAtt PublicSubnet.VpcId
+    Export:
+      Name: PublicSubnetVpcId
+  PublicSubnet: 
+    Value: !GetAtt PublicSubnet.SubnetId
+    Export:
+      Name: PublicSubnetId
+  PublicSubnetRouteTableAssociationId:
+    Value: !GetAtt PublicSubnetRouteTableAssociation.Id
+    Export:
+      Name: PublicSubnetRouteTableAssociationId

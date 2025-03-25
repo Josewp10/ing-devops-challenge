@@ -1,0 +1,56 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  bucketName:
+    Type: String
+  ownershipControls:
+    Type: String
+    Default: BucketOwnerPreferred
+    AllowedValues:
+      - BucketOwnerPreferred
+      - ObjectWriter
+      - BucketOwnerEnforced
+  versioning:
+    Type: String
+    Default: Enabled
+    AllowedValues:
+      - Enabled
+      - Suspended
+
+Resources:
+  S3Bucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketEncryption: 
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: 'AES256'
+      BucketName: !Ref bucketName
+      OwnershipControls: 
+        Rules:
+          - ObjectOwnership: !Ref ownershipControls
+      VersioningConfiguration: 
+        Status: !Ref versioning
+      CorsConfiguration:
+        CorsRules:
+          - AllowedHeaders:
+              - "*"
+            AllowedMethods:
+              - "GET"
+              - "HEAD"
+              - "POST"
+              - "PUT"
+              - "DELETE"
+            AllowedOrigins:
+              - "*"
+
+Outputs:
+  S3DomainName:
+    Value: !GetAtt S3Bucket.DomainName
+    Export:
+      Name: !Sub "${AWS::StackName}-S3BucketDomainName"
+  BucketName:
+    Value: !Ref S3Bucket
+    Export: 
+      Name:  !Sub "${AWS::StackName}-S3BucketName"
+

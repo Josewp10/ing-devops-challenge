@@ -1,0 +1,36 @@
+AWSTemplateFormatVersion: '2010-09-09'
+
+Parameters:
+  loadBalancerName:
+    Type: String
+  ipAddressType:
+    Type: String
+    Default: ipv4
+    AllowedValues:
+      - ipv4
+      - dualstack
+      - dualstack-without-public-ipv4
+  subnets:
+    Type: CommaDelimitedList
+    Default: ""
+  securityGroups:
+    Type: CommaDelimitedList
+    Default: ""
+  loadBalancerType:
+    Type: String
+    Default: application
+    AllowedValues:
+      - application
+      - network
+      - gateway
+
+Resources:
+  LoadBalancer:
+    Type: AWS::ElasticLoadBalancingV2::LoadBalancer
+    Properties:
+      IpAddressType: !Ref ipAddressType
+      Name: !Ref loadBalancerName      
+      SecurityGroups: 
+        - !Ref securityGroups
+      Subnets: 
+        - !Ref subnets
